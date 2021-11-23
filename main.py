@@ -107,12 +107,17 @@ def print_cards():
 def main():
     while(True):
         get_rand()
-        #sum_str = hashlib.md5(str(cards).encode('utf-8')).hexdigest()
-        #if not sum_str in sums:
-        #    sums.append(sum_str)
+
+        # sum_str = hashlib.md5(str(cards).encode('utf-8')).hexdigest()
+        # if sum_str in sums:
+        #     print("MISS")
+        #     break
+        # sums.append(sum_str)
         # print("{}: {}".format(len(sums), sum_str))
+
         if validate():
-            print_cards()
+            # print_cards()
+            print(cards)
             break
 
 main()
