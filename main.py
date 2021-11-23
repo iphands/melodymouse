@@ -122,12 +122,15 @@ def main():
     start = datetime.now()
     end   = datetime.now()
 
+    SAMPLE = 100000
+
     while(True):
-        if i == 1024:
-            i = 0
-            end   = datetime.now()
-            print("Time: {}".format((end - start).total_seconds() * 1000))
-            start = datetime.now()
+        # if i == SAMPLE:
+        #     i = 0
+        #     end = datetime.now()
+        #     ms = (end - start).total_seconds()
+        #     print("tps: {}".format(SAMPLE / ms))
+        #     start = datetime.now()
 
         i += 1
         get_rand()
