@@ -1,5 +1,6 @@
 import random
 import hashlib
+from datetime import datetime
 
 BU = 1
 BD = -1
@@ -23,6 +24,18 @@ cards = [
     [ PU, GD, RD, BU ],
     [ PU, BU, RD, GD ],
 ]
+
+# cards = [
+#     [ BD, BU, BD, RD ],
+#     [ BD, BU, BD, PU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+# ]
 
 def rotate(c):
     return [ c[3], c[0], c[1], c[2] ]
@@ -101,23 +114,48 @@ def print_row(num):
 
 def print_cards():
     print_row(0)
-    print_row(1)
-    print_row(2)
+    print_row(3)
+    print_row(6)
 
 def main():
+    i = 0
+    start = datetime.now()
+    end   = datetime.now()
+
     while(True):
+        if i == 1024:
+            i = 0
+            end   = datetime.now()
+            print("Time: {}".format((end - start).total_seconds() * 1000))
+            start = datetime.now()
+
+        i += 1
         get_rand()
 
         # sum_str = hashlib.md5(str(cards).encode('utf-8')).hexdigest()
         # if sum_str in sums:
         #     print("MISS")
-        #     break
+        #     continue
         # sums.append(sum_str)
+
         # print("{}: {}".format(len(sums), sum_str))
 
+        # print("------------------")
+        # print(cards)
+        # print_cards()
         if validate():
             # print_cards()
+            print("FOUND in {} tries".format(i))
             print(cards)
+            print_cards()
             break
 
+def test():
+    for i in range(0, 10):
+        print("-----------")
+        print(cards[0])
+        # cards[0] = rotate(cards[0])
+        get_rand()
+
+# test()
 main()
