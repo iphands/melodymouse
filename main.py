@@ -125,12 +125,12 @@ def main():
     SAMPLE = 100000
 
     while(True):
-        # if i == SAMPLE:
-        #     i = 0
-        #     end = datetime.now()
-        #     ms = (end - start).total_seconds()
-        #     print("tps: {}".format(SAMPLE / ms))
-        #     start = datetime.now()
+        if i == SAMPLE:
+            i = 0
+            end = datetime.now()
+            ms = (end - start).total_seconds()
+            print("tps: {}".format(SAMPLE / ms))
+            start = datetime.now()
 
         i += 1
         get_rand()
