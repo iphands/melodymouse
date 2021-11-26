@@ -1,8 +1,14 @@
 import itertools
 import random
 import hashlib
+import sys
+import threading
 from datetime import datetime
 from collections import deque
+
+FINISHED = False
+
+THREADS = 30
 
 BU = 1
 BD = -1
@@ -120,43 +126,66 @@ def print_cards(c):
     print_row(c, 3)
     print_row(c, 6)
 
+def do_test(i, rot_matrix, pcards, results, j):
+    print(i)
+    # if i == SAMPLE:
+    #     i = 0
+    #     end = datetime.now()
+    #     ms = (end - start).total_seconds()
+    #     print("tps: {}".format(SAMPLE / ms))
+    #     start = datetime.now()
+
+    i += 1
+    # get_rand()
+
+    # sum_str = hashlib.md5(str(cards).encode('utf-8')).hexdigest()
+    # if sum_str in sums:
+    #     print("MISS")
+    #     continue
+    # sums.append(sum_str)
+
+    # print("{}: {}".format(len(sums), sum_str))
+
+    # print("------------------")
+    # print(cards)
+
+    for m in rot_matrix:
+	tmp = rotate_all(m, list(pcards))
+	if validate(tmp):
+	    # print("FOUND in {} tries".format(i))
+	    # print(tmp)
+	    results[j] = tmp
+	    return
+
 def main(rot_matrix):
     i = 0
+    j = 0
+    threads = []
     start = datetime.now()
     end   = datetime.now()
 
     SAMPLE = 100000
+    results = [False] * THREADS
 
     for pcards in itertools.permutations(cards):
-        print(i)
-        # if i == SAMPLE:
-        #     i = 0
-        #     end = datetime.now()
-        #     ms = (end - start).total_seconds()
-        #     print("tps: {}".format(SAMPLE / ms))
-        #     start = datetime.now()
+	if j == THREADS:
+	    for t in threads:
+		t.join()
+		for r in results:
+		    if r:
+			print("Found!")
+			print(r)
+			sys.exit(0)
+	    j = 0
+	    results = [False] * THREADS
 
-        i += 1
-        # get_rand()
 
-        # sum_str = hashlib.md5(str(cards).encode('utf-8')).hexdigest()
-        # if sum_str in sums:
-        #     print("MISS")
-        #     continue
-        # sums.append(sum_str)
-
-        # print("{}: {}".format(len(sums), sum_str))
-
-        # print("------------------")
-        # print(cards)
-
-        for m in rot_matrix:
-            tmp = rotate_all(m, list(pcards))
-            if validate(tmp):
-                print("FOUND in {} tries".format(i))
-                print(tmp)
-                print_cards(tmp)
-                return
+	t = threading.Thread(target=do_test, args=(i, rot_matrix, pcards, results, j))
+	threads.append(t)
+	t.start()
+	# do_test(i, rot_matrix, pcards)
+	i += 1
+	j += 1
 
 def get_rot_matrix():
     ret = []
