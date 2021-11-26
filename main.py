@@ -188,7 +188,7 @@ def main(rot_matrix):
                     sys.exit(0)
             j = 0
 
-	t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
+        t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
         threads.append(t)
         t.start()
 
