@@ -2,7 +2,8 @@ import itertools
 import random
 import hashlib
 import sys
-import threading
+# import threading
+import multiprocessing
 from datetime import datetime
 from collections import deque
 
@@ -155,7 +156,12 @@ def do_test(i, rot_matrix, pcards, results, j):
             # print("FOUND in {} tries".format(i))
             # print(tmp)
             results[j] = tmp
+	    sys.exit(0)
             return
+
+def reset_results(r):
+    for i in range(THREADS):
+	r[i] = False
 
 def main(rot_matrix):
     i = 0
@@ -165,25 +171,27 @@ def main(rot_matrix):
     end   = datetime.now()
 
     SAMPLE = 100000
-    results = [False] * THREADS
+    manager = multiprocessing.Manager()
+    results = manager.list([False] * THREADS)
 
     for pcards in itertools.permutations(cards):
         if j == THREADS:
             for t in threads:
                 t.join()
-                for r in results:
-                    if r:
-                        print("Found!")
-                        print(r)
-                        sys.exit(0)
+
+	    # print(results)
+
+            for r in results:
+                if r:
+                    print("Found!")
+                    print(r)
+                    sys.exit(0)
             j = 0
-            results = [False] * THREADS
 
-
-        t = threading.Thread(target=do_test, args=(i, rot_matrix, pcards, results, j))
+	t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
         threads.append(t)
         t.start()
-        # do_test(i, rot_matrix, pcards)
+
         i += 1
         j += 1
 
