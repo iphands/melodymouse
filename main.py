@@ -128,7 +128,7 @@ def main(rot_matrix):
     SAMPLE = 100000
 
     for pcards in itertools.permutations(cards):
-	print(i)
+        print(i)
         # if i == SAMPLE:
         #     i = 0
         #     end = datetime.now()
