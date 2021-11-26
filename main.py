@@ -156,12 +156,12 @@ def do_test(i, rot_matrix, pcards, results, j):
             # print("FOUND in {} tries".format(i))
             # print(tmp)
             results[j] = tmp
-	    sys.exit(0)
+            sys.exit(0)
             return
 
 def reset_results(r):
     for i in range(THREADS):
-	r[i] = False
+        r[i] = False
 
 def main(rot_matrix):
     i = 0
@@ -179,7 +179,7 @@ def main(rot_matrix):
             for t in threads:
                 t.join()
 
-	    # print(results)
+            # print(results)
 
             for r in results:
                 if r:
