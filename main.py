@@ -129,7 +129,7 @@ def print_cards(c):
     print_row(c, 6)
 
 def do_test(i, rot_matrix, pcards, results, j):
-    print(j)
+    print(i)
     # if i == SAMPLE:
     #     i = 0
     #     end = datetime.now()
@@ -191,8 +191,8 @@ def main(rot_matrix):
 
         pcards = [ 0 ] * 9
         tmp = CARDS[:]
-        for i, c in enumerate(card_list):
-            pcards[i] = tmp[c]
+        for idx, c in enumerate(card_list):
+            pcards[idx] = tmp[c]
 
         t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
         threads.append(t)
