@@ -129,7 +129,7 @@ def print_cards(c):
     print_row(c, 6)
 
 def do_test(i, rot_matrix, pcards, results, j):
-    print(i)
+    print(j)
     # if i == SAMPLE:
     #     i = 0
     #     end = datetime.now()
