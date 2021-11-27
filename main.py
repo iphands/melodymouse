@@ -2,7 +2,6 @@ import itertools
 import random
 import hashlib
 import sys
-# import threading
 import multiprocessing
 from datetime import datetime
 from collections import deque
@@ -22,7 +21,7 @@ PU = -4
 
 sums = []
 
-cards = [
+CARDS = [
     [ BD, RD, PU, GU ],
     [ PD, GD, BU, RU ],
     [ BD, GD, BU, RU ],
@@ -34,11 +33,13 @@ cards = [
     [ PU, BU, RD, GD ],
 ]
 
-# cards = [
-#     [ BD, BU, BD, BU ],
-#     [ BD, BU, BD, BU ],
-#     [ BD, BU, BD, BU ],
-#     [ BD, BU, BD, BU ],
+cards_list = [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+
+# CARDS = [
+#     [ BD, BU, BD, PU ],
+#     [ BD, BU, BD, RD ],
+#     [ BD, BU, BD, GU ],
+#     [ BD, BU, BD, GU ],
 #     [ BD, BU, BD, BU ],
 #     [ BD, BU, BD, BU ],
 #     [ BD, BU, BD, BU ],
@@ -128,7 +129,7 @@ def print_cards(c):
     print_row(c, 6)
 
 def do_test(i, rot_matrix, pcards, results, j):
-    print(i)
+    print(j)
     # if i == SAMPLE:
     #     i = 0
     #     end = datetime.now()
@@ -150,11 +151,10 @@ def do_test(i, rot_matrix, pcards, results, j):
     # print("------------------")
     # print(cards)
 
+    pcards = list(pcards)[:]
     for m in rot_matrix:
-        tmp = rotate_all(m, list(pcards))
+        tmp = rotate_all(m, pcards[:])
         if validate(tmp):
-            # print("FOUND in {} tries".format(i))
-            # print(tmp)
             results[j] = tmp
             sys.exit(0)
             return
@@ -174,7 +174,7 @@ def main(rot_matrix):
     manager = multiprocessing.Manager()
     results = manager.list([False] * THREADS)
 
-    for pcards in itertools.permutations(cards):
+    for card_list in itertools.permutations(cards_list):
         if j == THREADS:
             for t in threads:
                 t.join()
@@ -185,8 +185,14 @@ def main(rot_matrix):
                 if r:
                     print("Found!")
                     print(r)
+                    print_cards(r)
                     sys.exit(0)
             j = 0
+
+        pcards = [ 0 ] * 9
+        tmp = CARDS[:]
+        for i, c in enumerate(card_list):
+            pcards[i] = tmp[c]
 
         t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
         threads.append(t)
@@ -198,7 +204,6 @@ def main(rot_matrix):
 def get_rot_matrix():
     ret = []
     a = [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-    # a = [ 0, 0, 0 ]
     i = 0
 
     try:
@@ -223,8 +228,9 @@ def rotate_all(m, cs):
     return cs
 
 def test():
-    a = [ 1, 2, 3 ]
+    a = [ 1, 2, 3, 4, 5, 6, 7, 8, 9]
     for t in itertools.permutations(a):
         print(t)
 
+# test()
 main(get_rot_matrix())
