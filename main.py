@@ -8,7 +8,7 @@ from collections import deque
 
 FINISHED = False
 
-THREADS = 30
+THREADS = 32
 
 BU = 1
 BD = -1
@@ -36,10 +36,10 @@ CARDS = [
 cards_list = [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
 
 # CARDS = [
-#     [ BD, BU, BD, PU ],
-#     [ BD, BU, BD, RD ],
-#     [ BD, BU, BD, GU ],
-#     [ BD, BU, BD, GU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
+#     [ BD, BU, BD, BU ],
 #     [ BD, BU, BD, BU ],
 #     [ BD, BU, BD, BU ],
 #     [ BD, BU, BD, BU ],
@@ -51,15 +51,6 @@ def rotate(c, n):
     tmp = deque(c)
     tmp.rotate(n)
     return list(tmp)
-
-def get_rand():
-    for card_i, c in enumerate(cards):
-        n = random.randint(0, 3)
-        # print("Rotating card {} ({}) {} times:".format(card_i, card, n))
-        for i in range(0, n):
-            cards[card_i] = rotate([c[0], c[1], c[2], c[3]])
-            # print(cards[card_i])
-    random.shuffle(cards)
 
 def validate(cards):
     # Top row
@@ -129,28 +120,6 @@ def print_cards(c):
     print_row(c, 6)
 
 def do_test(i, rot_matrix, pcards, results, j):
-    print(i)
-    # if i == SAMPLE:
-    #     i = 0
-    #     end = datetime.now()
-    #     ms = (end - start).total_seconds()
-    #     print("tps: {}".format(SAMPLE / ms))
-    #     start = datetime.now()
-
-    i += 1
-    # get_rand()
-
-    # sum_str = hashlib.md5(str(cards).encode('utf-8')).hexdigest()
-    # if sum_str in sums:
-    #     print("MISS")
-    #     continue
-    # sums.append(sum_str)
-
-    # print("{}: {}".format(len(sums), sum_str))
-
-    # print("------------------")
-    # print(cards)
-
     pcards = list(pcards)[:]
     for m in rot_matrix:
         tmp = rotate_all(m, pcards[:])
@@ -170,7 +139,6 @@ def main(rot_matrix):
     start = datetime.now()
     end   = datetime.now()
 
-    SAMPLE = 100000
     manager = multiprocessing.Manager()
     results = manager.list([False] * THREADS)
 
@@ -178,8 +146,6 @@ def main(rot_matrix):
         if j == THREADS:
             for t in threads:
                 t.join()
-
-            # print(results)
 
             for r in results:
                 if r:
@@ -190,10 +156,10 @@ def main(rot_matrix):
             j = 0
 
         pcards = [ 0 ] * 9
-        tmp = CARDS[:]
         for idx, c in enumerate(card_list):
-            pcards[idx] = tmp[c]
+            pcards[idx] = CARDS[:][c]
 
+        print(i)
         t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
         threads.append(t)
         t.start()
@@ -224,6 +190,7 @@ def get_rot_matrix():
 
 def rotate_all(m, cs):
     for i, c in enumerate(cs):
+        # print("Rotating card[{}] {} times".format(i, m[i]))
         cs[i] = rotate(c, m[i])
     return cs
 
@@ -232,5 +199,7 @@ def test():
     for t in itertools.permutations(a):
         print(t)
 
-# test()
+# 262144
+# print(len(get_rot_matrix()))
+
 main(get_rot_matrix())
