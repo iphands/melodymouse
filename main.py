@@ -185,14 +185,14 @@ def main(rot_matrix):
                 if r:
                     print("Found!")
                     print(r)
-		    print_cards(r)
+                    print_cards(r)
                     sys.exit(0)
             j = 0
 
-	pcards = [ 0 ] * 9
-	tmp = CARDS[:]
-	for i, c in enumerate(card_list):
-	    pcards[i] = tmp[c]
+        pcards = [ 0 ] * 9
+        tmp = CARDS[:]
+        for i, c in enumerate(card_list):
+            pcards[i] = tmp[c]
 
         t = multiprocessing.Process(target=do_test, args=(i, rot_matrix, pcards, results, j))
         threads.append(t)
