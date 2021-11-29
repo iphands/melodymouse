@@ -8,7 +8,7 @@ from collections import deque
 
 FINISHED = False
 
-THREADS = 32
+THREADS = 8
 
 BU = 1
 BD = -1
@@ -201,5 +201,7 @@ def test():
 
 # 262144
 # print(len(get_rot_matrix()))
+# for m in get_rot_matrix():
+#     print(m)
 
 main(get_rot_matrix())
