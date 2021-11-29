@@ -8,16 +8,16 @@ from collections import deque
 
 FINISHED = False
 
-THREADS = 8
+THREADS = 32
 
 BU = 1
 BD = -1
 RU = 2
 RD = -2
-GU = 4
+GU = 3
 GD = -3
-PD = 4
-PU = -4
+PU = 4
+PD = -4
 
 sums = []
 
